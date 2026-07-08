@@ -7,9 +7,13 @@
       <div class="label muted">в докладе</div>
       <p class="talk">«{{ $frontmatter.talk }}»</p>
     </div>
-    <div class="photo" :style="{ backgroundImage: `url(${$frontmatter.photo || '/img/speaker-placeholder.png'})` }" />
+    <div class="photo" :style="{ backgroundImage: `url(${asset($frontmatter.photo || '/img/speaker-placeholder.png')})` }" />
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-speaker {

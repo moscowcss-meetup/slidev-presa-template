@@ -1,12 +1,16 @@
 <template>
   <div class="mcss-qrside">
-    <img class="qr" :src="$frontmatter.qr" alt="QR" />
+    <img class="qr" :src="asset($frontmatter.qr)" alt="QR" />
     <div class="content">
       <h2 v-if="$frontmatter.title" class="heading">{{ $frontmatter.title }}</h2>
       <div class="body"><slot /></div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-qrside {

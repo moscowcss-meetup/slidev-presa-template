@@ -1,5 +1,5 @@
 <template>
-  <div class="mcss-fullimg" :style="{ backgroundImage: `url(${$frontmatter.image})` }">
+  <div class="mcss-fullimg" :style="{ backgroundImage: `url(${asset($frontmatter.image)})` }">
     <!-- опциональная подпись поверх фото (тело слайда) -->
     <div v-if="hasCaption" class="caption"><slot /></div>
   </div>
@@ -7,6 +7,7 @@
 
 <script setup>
 import { useSlots } from 'vue'
+import { asset } from '../composables/asset.js'
 const hasCaption = !!useSlots().default
 </script>
 

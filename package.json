@@ -2,6 +2,7 @@
   "name": "moscowcss-meetup-template",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.10.0",
   "meetup": "31",
   "scripts": {
     "dev": "slidev open.md --open",
