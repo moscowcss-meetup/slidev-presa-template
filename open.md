@@ -11,6 +11,8 @@ fonts:
 mdc: true
 colorSchema: dark
 transition: fade
+# hash-роутинг — чтобы собранный дек работал под любым subpath (dist/<N>/open) без SPA-fallback
+routerMode: hash
 layout: cover
 subtitle: в Звуке
 ---
