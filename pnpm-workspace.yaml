@@ -1,0 +1,4 @@
+# Playwright нужен только для `pnpm export` (рендер PDF в headless-браузере) и не входит
+# в зависимости шаблона. Если поставите его для экспорта — поменяйте на true.
+allowBuilds:
+  playwright-chromium: false

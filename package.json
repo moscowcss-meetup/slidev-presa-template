@@ -1,0 +1,17 @@
+{
+  "name": "moscowcss-meetup-template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export --output Moscow_open_export.pdf",
+    "qr": "node scripts/gen-qr.mjs",
+    "test:qr": "node scripts/gen-qr.test.mjs"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.16.0",
+    "@slidev/theme-default": "^0.25.0",
+    "qrcode": "^1.5.4"
+  }
+}

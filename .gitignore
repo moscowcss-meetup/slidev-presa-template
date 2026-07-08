@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.pdf
+!Moscow_open.pdf
+!Moscow_close.pdf
+.slidev/
