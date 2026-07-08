@@ -35,7 +35,10 @@ jobs:
       - name: Build decks (dist/<meetup>/{open,close} + лендинг)
         run: pnpm build
 
+      # enablement: true — включает Pages сам на первом прогоне (иначе Not Found, пока не включить вручную)
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
