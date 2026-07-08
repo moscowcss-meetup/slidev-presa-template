@@ -3,7 +3,7 @@
     <div class="row">
       <figure v-for="(item, i) in $frontmatter.items" :key="i" class="cell">
         <figcaption class="cap">{{ item.label }}</figcaption>
-        <img :src="item.img" :alt="item.label" />
+        <img :src="asset(item.img)" :alt="item.label" />
       </figure>
     </div>
     <div v-if="$frontmatter.footer" class="footer">
@@ -12,6 +12,10 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-qrtrio {

@@ -1,10 +1,14 @@
 <template>
   <div class="mcss-cover">
-    <img class="logo" src="/logo.svg" alt="MoscowCSS" />
+    <img class="logo" :src="asset('/logo.svg')" alt="MoscowCSS" />
     <div class="title"><slot /></div>
     <div v-if="$frontmatter.subtitle" class="subtitle">{{ $frontmatter.subtitle }}</div>
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-cover {

@@ -1,12 +1,16 @@
 <template>
   <div class="mcss-logoside">
-    <img class="logo" src="/logo.svg" alt="MoscowCSS" />
+    <img class="logo" :src="asset('/logo.svg')" alt="MoscowCSS" />
     <div class="content">
       <h2 v-if="$frontmatter.title" class="heading">{{ $frontmatter.title }}</h2>
       <div class="body"><slot /></div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-logoside {

@@ -6,11 +6,15 @@
         v-for="(src, i) in ($frontmatter.images || [])"
         :key="i"
         class="cell"
-        :style="{ backgroundImage: `url(${src})` }"
+        :style="{ backgroundImage: `url(${asset(src)})` }"
       />
     </div>
   </div>
 </template>
+
+<script setup>
+import { asset } from '../composables/asset.js'
+</script>
 
 <style scoped>
 .mcss-photogrid {
