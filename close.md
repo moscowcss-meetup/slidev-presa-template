@@ -55,6 +55,16 @@ title: Оцените митап
 Давайте делать наш митап и доклады лучше.
 
 ---
+layout: qr-side
+qr: /qr/beerjs.svg
+title: BeerJS Moscow
+---
+
+<!-- ПОСЛЕ ОБРАТНОЙ СВЯЗИ — QR на телеграм BeerJS Moscow -->
+
+Собираемся после митапов пообщаться поближе!)
+
+---
 layout: photo-grid
 title: Наша редакция
 images:
