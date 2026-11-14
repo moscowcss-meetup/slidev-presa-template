@@ -4,7 +4,7 @@
 theme: ./theme
 title: MoscowCSS Meetup
 mdc: true
-colorSchema: dark
+colorSchema: auto
 transition: fade
 # hash-роутинг — чтобы собранный дек работал под любым subpath (dist/<N>/open) без SPA-fallback
 routerMode: hash
