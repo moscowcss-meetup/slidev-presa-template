@@ -137,32 +137,26 @@
 
 .mc-end__qr {
 	position: relative;
-	padding-right: 3rem;
 }
 
+/* QR из gen-qr сам несёт тихую зону в 4 модуля; карточка .mc-qrcard (meetup.css)
+   добавляет к ней тёмное поле. Ничего не должно заходить внутрь этого поля. */
 .mc-qr {
-	width: 15rem;
+	width: 17rem;
 	margin: 0;
-	padding: 1.25rem 1.25rem 1rem;
-	border-radius: 1.5rem;
-	background: #ffffff;
-	color: var(--mc-ink);
-	transform: rotate(-3deg);
-}
-
-.mc-qr > img {
-	display: block;
-	width: 100%;
 }
 
 .mc-qr > figcaption {
-	margin-top: 0.75rem;
-	font: 400 1rem/1.3 var(--mc-font-text);
+	margin-top: 1.25rem;
+	color: var(--mc-muted);
+	font: 400 1rem/1.3 var(--mc-font-mono);
 	text-align: center;
 }
 
+/* Стикер слева снизу от карточки: заходит на неё на 1rem — только на поле,
+   не на модули. Поверх QR его класть нельзя: закрывает маркер. */
 .mc-end__sticker {
 	position: absolute;
-	top: -2.5rem;
-	right: 0;
+	right: calc(100% - 1rem);
+	bottom: -1.5rem;
 }

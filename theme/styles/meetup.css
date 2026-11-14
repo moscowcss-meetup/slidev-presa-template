@@ -61,16 +61,6 @@
 	gap: 3.5rem;
 }
 
-.mc-qrside__qr {
-	position: relative;
-}
-
-.mc-qrside__sticker {
-	position: absolute;
-	top: -2.5rem;
-	right: -2.5rem;
-}
-
 .mc-qrside__content h1 {
 	margin-bottom: 1.25rem;
 }
