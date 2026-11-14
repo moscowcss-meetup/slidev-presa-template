@@ -21,7 +21,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Полная история: прошлые митапы пересобираются из своих коммитов (archive/meetups.json)
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -31,6 +34,9 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Build archive (прошлые митапы из своих коммитов)
+        run: pnpm build:archive
 
       - name: Build decks (dist/<meetup>/{open,close} + лендинг)
         run: pnpm build

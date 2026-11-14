@@ -8,6 +8,7 @@
     "dev": "slidev open.md --open",
     "dev:close": "slidev close.md --open",
     "build": "node scripts/build.mjs",
+    "build:archive": "node scripts/build-archive.mjs",
     "export": "slidev export open.md --output open.pdf",
     "export:close": "slidev export close.md --output close.pdf",
     "qr": "node scripts/gen-qr.mjs",
