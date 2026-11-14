@@ -12,7 +12,7 @@
 import QRCode from 'qrcode'
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve, isAbsolute } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -155,4 +155,5 @@ function main() {
 }
 
 // Запуск только как CLI (не при импорте из теста)
-if (import.meta.url === `file://${process.argv[1]}`) main()
+// pathToFileURL — иначе на Windows (file:///C:/… против C:\…) условие никогда не срабатывает
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main()
