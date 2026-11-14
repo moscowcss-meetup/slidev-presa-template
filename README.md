@@ -5,7 +5,7 @@
 - **старт** — [`open.md`](open.md): приветствие, партнёр, QR, спикеры, «Мы начинаем»;
 - **финал** — [`close.md`](close.md): спасибо, партнёр, «Оцените митап», редакция.
 
-Вёрстка живёт в теме [`theme/`](theme/README.md) в стиле css.moscow. На каждый митап меняется
+Вёрстка живёт в теме [`theme/`](theme/README.md) в стиле сайта [css.moscow](https://css.moscow). На каждый митап меняется
 только контент в `open.md` и `close.md`.
 
 **Сайт со всеми митапами:** https://moscowcss-meetup.github.io/slidev-presa-template/
@@ -30,7 +30,7 @@ pnpm test:qr        # проверка генератора QR
 | [`theme/`](theme/) | тема: layout'ы, компоненты, токены, шрифты, светлая/тёмная схема | [theme/README.md](theme/README.md) |
 | [`scripts/`](scripts/) | сборка, архив прошлых митапов, генератор QR | [scripts/README.md](scripts/README.md) |
 | [`public/`](public/) | QR-коды (пары тёмный/светлый), логотипы, фото | [public/README.md](public/README.md) |
-| [`archive/`](archive/) | прошлые митапы: копии деков и коммиты для сайта | [archive/README.md](archive/README.md) |
+| [`archive/`](archive/) | прошлые митапы: презентации и коммиты для сайта | [archive/README.md](archive/README.md) |
 | [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | деплой на GitHub Pages при пуше в `master` | [Деплой и история](#деплой-и-история) |
 
 ## Подготовка нового митапа
