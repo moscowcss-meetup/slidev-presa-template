@@ -32,6 +32,11 @@
 	--mc-on-sticker: var(--mc-paper);
 	--mc-card-bg: #f4f3ef;
 
+	/* Карточка QR: фон совпадает с фоном QR из `pnpm qr` (light — белый, dark — #121212),
+	   обводка нужна, чтобы белая карточка не терялась на белом слайде */
+	--mc-qr-bg: #ffffff;
+	--mc-qr-edge: var(--mc-divider);
+
 	/* Цветные плашки: подложка / текст на ней */
 	--mc-tone-sky: var(--mc-sky);
 	--mc-on-tone-sky: var(--mc-ink);
@@ -73,5 +78,7 @@ html.dark {
 	--mc-sticker-bg: #e4ded3;
 	--mc-on-sticker: var(--mc-ink);
 	--mc-card-bg: var(--mc-graphite-deep);
+	--mc-qr-bg: #121212;
+	--mc-qr-edge: transparent;
 	--mc-tone-blue: var(--mc-blue-soft);
 }

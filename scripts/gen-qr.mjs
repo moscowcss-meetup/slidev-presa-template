@@ -1,36 +1,24 @@
 #!/usr/bin/env node
 // Генератор QR-кодов в дизайне MoscowCSS: кружки-модули, кольцевые «глазки», логотип по
-// центру. Две темы: dark (белое на тёмном, как в оригинальных слайдах) и light (тёмное на
-// белом). Логотип — башенка MoscowCSS или логотип партнёра (--logo-svg). Выдаёт SVG.
+// центру (башенка или логотип партнёра). Темы dark/light — см. qr-theme.mjs. Выдаёт SVG.
+// Документация и примеры: scripts/README.md
 //
-// Использование:
-//   node scripts/gen-qr.mjs <url> [имя] [--out путь.svg] [--theme dark|light]
-//                            [--bg #121212|none] [--fg #ffffff] [--no-logo]
-//                            [--logo-svg путь.svg] [--logo N] [--cell N]
-// Примеры:
-//   pnpm qr https://css.moscow site                         → public/qr/site.svg
-//   pnpm qr https://css.moscow site-light --theme light     → светлый вариант
-//   pnpm qr https://t.me/school21sber school21 --logo-svg public/logos/school21.svg
-//   pnpm qr https://t.me/moscowcss chat --bg none
+//   pnpm qr <url> <имя>                    → public/qr/<имя>.svg + <имя>-light.svg (пара)
+//   pnpm qr <url> <имя> --theme light      → только одна тема
+//   pnpm qr <url> --out путь.svg           → один файл (тема dark, если не задана)
+//   pnpm qr --light-from public/qr/*.svg   → светлые версии готовых тёмных QR (URL не нужен)
+//
+// Флаги: --logo-svg путь.svg (логотип партнёра), --no-logo, --bg #цвет|none, --fg #цвет,
+//        --logo 0.24 (доля QR под логотип), --cell 10
 
 import QRCode from 'qrcode'
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
-import { dirname, resolve, isAbsolute } from 'node:path'
+import { dirname, resolve, isAbsolute, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { THEMES, lightPath, isLightPath, swapToLight } from './qr-theme.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-
-// Темы: цвет модулей (fg) и фона (bg). --fg/--bg переопределяют тему.
-export const THEMES = {
-  dark: { fg: '#ffffff', bg: '#121212' },  // как оригинальные слайды и .mc-qrcard темы
-  light: { fg: '#121212', bg: '#ffffff' },
-}
-
-// Цвета в логотипах, которые светлая тема меняет местами: белые штрихи → цвет модулей,
-// тёмная подложка башенки → цвет фона. Остальное (красное «CSS») не трогаем.
-// (?![0-9a-f]) — чтобы #fff не съел начало цвета вроде #fffe00
-const WHITE = /#fff(?:fff)?(?![0-9a-f])|rgb\(100%, 100%, 100%\)|\bwhite\b/gi
-const PLATE = /#121212(?![0-9a-f])|rgb\(7\.058716%, 7\.058716%, 7\.058716%\)/gi
+const abs = (p) => (isAbsolute(p) ? p : resolve(ROOT, p))
 
 const DEFAULTS = {
   theme: 'dark',
@@ -46,6 +34,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--no-logo') opts.logo = false
+    else if (a === '--light-from') opts.lightFrom = true
     else if (a === '--out') opts.out = argv[++i]
     else if (a === '--theme') opts.theme = argv[++i]
     else if (a === '--logo-svg') opts.logoSvg = argv[++i]
@@ -56,6 +45,7 @@ function parseArgs(argv) {
     else if (a.startsWith('--')) throw new Error(`неизвестный флаг: ${a}`)
     else positional.push(a)
   }
+  opts.positional = positional
   opts.url = positional[0]
   opts.name = positional[1]
   return opts
@@ -70,7 +60,7 @@ function safeName(name, url) {
 // Вкладываем логотип как <svg> с его собственным viewBox — масштаб по центру зоны.
 // file — свой логотип (партнёр); без него — башенка public/logo.svg.
 function loadLogo(file) {
-  const p = file ? (isAbsolute(file) ? file : resolve(ROOT, file)) : resolve(ROOT, 'public/logo.svg')
+  const p = file ? abs(file) : resolve(ROOT, 'public/logo.svg')
   if (!existsSync(p)) {
     if (file) throw new Error(`нет файла логотипа: ${file}`)
     return null
@@ -82,14 +72,12 @@ function loadLogo(file) {
   return { viewBox, inner }
 }
 
-// Перекраска логотипа под тему: currentColor всегда = цвет модулей; в light белое и
-// тёмная подложка меняются местами (через маркер, чтобы замены не наложились).
+// Логотип под тему: в light белое и подложка меняются местами; currentColor = цвет модулей.
+// currentColor подставляем ПОСЛЕ перекраски: иначе тёмный fg светлой темы (#121212)
+// совпадёт с подложкой и перекрасится в белый.
 function themeLogo(inner, theme, fg, bg) {
-  let out = inner.replace(/currentColor/g, fg)
-  if (theme === 'light') {
-    out = out.replace(PLATE, '__QR_BG__').replace(WHITE, fg).replace(/__QR_BG__/g, bg === 'none' ? 'none' : bg)
-  }
-  return out
+  const out = theme === 'light' ? swapToLight(inner, fg, bg === 'none' ? 'none' : bg) : inner
+  return out.replace(/currentColor/g, fg)
 }
 
 export function generateSvg(url, options = {}) {
@@ -129,9 +117,7 @@ export function generateSvg(url, options = {}) {
   for (let r = 0; r < N; r++) {
     for (let c = 0; c < N; c++) {
       if (!isDark(r, c) || inFinder(r, c) || inLogoZone(r, c)) continue
-      const cx = off + c * cell + cell / 2
-      const cy = off + r * cell + cell / 2
-      dots.push(`<circle cx="${cx}" cy="${cy}" r="${rr}"/>`)
+      dots.push(`<circle cx="${off + c * cell + cell / 2}" cy="${off + r * cell + cell / 2}" r="${rr}"/>`)
     }
   }
   parts.push(`<g fill="${fg}">${dots.join('')}</g>`)
@@ -159,36 +145,42 @@ export function generateSvg(url, options = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalPx} ${totalPx}" width="${totalPx}" height="${totalPx}">${parts.join('')}</svg>\n`
 }
 
+const write = (file, svg) => {
+  mkdirSync(dirname(file), { recursive: true })
+  writeFileSync(file, svg)
+  console.log(`✓ ${relative(ROOT, file) || file}`)
+}
+
+// --light-from: светлая пара к каждому тёмному SVG (уже светлые пропускаем)
+function lightFrom(files) {
+  if (!files.length) throw new Error('--light-from: укажите тёмные SVG, например public/qr/*.svg')
+  for (const f of files.map(abs)) {
+    if (isLightPath(f)) continue
+    if (!existsSync(f)) throw new Error(`нет файла: ${f}`)
+    write(lightPath(f), swapToLight(readFileSync(f, 'utf8')))
+  }
+}
+
 function main() {
-  let opts
-  try {
-    opts = parseArgs(process.argv.slice(2))
-  } catch (e) {
-    console.error('Ошибка аргументов:', e.message)
-    process.exit(2)
-  }
-  if (!opts.url) {
-    console.error('Использование: node scripts/gen-qr.mjs <url> [имя] [--out f.svg] [--theme dark|light] [--logo-svg f.svg] [--bg #121212|none] [--no-logo]')
-    process.exit(2)
-  }
+  const opts = parseArgs(process.argv.slice(2))
+  if (opts.lightFrom) return lightFrom(opts.positional)
+  if (!opts.url) throw new Error('нужен URL. Справка и примеры: scripts/README.md')
 
-  let svg
-  try {
-    svg = generateSvg(opts.url, opts)
-  } catch (e) {
-    console.error('Не удалось сгенерировать QR:', e.message)
-    process.exit(1)
-  }
-
-  const out = opts.out
-    ? (isAbsolute(opts.out) ? opts.out : resolve(ROOT, opts.out))
-    : resolve(ROOT, 'public/qr', `${safeName(opts.name, opts.url)}.svg`)
-  mkdirSync(dirname(out), { recursive: true })
-  writeFileSync(out, svg)
-  console.log(`✓ QR → ${out}`)
+  // --out или явная --theme → один файл; иначе пара <имя>.svg + <имя>-light.svg
+  if (opts.out) return write(abs(opts.out), generateSvg(opts.url, opts))
+  const dark = resolve(ROOT, 'public/qr', `${safeName(opts.name, opts.url)}.svg`)
+  const themes = opts.theme ? [opts.theme] : Object.keys(THEMES)
+  for (const theme of themes) write(theme === 'light' ? lightPath(dark) : dark, generateSvg(opts.url, { ...opts, theme }))
   console.log(`  ссылка: ${opts.url}`)
 }
 
 // Запуск только как CLI (не при импорте из теста)
 // pathToFileURL — иначе на Windows (file:///C:/… против C:\…) условие никогда не срабатывает
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main()
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  try {
+    main()
+  } catch (e) {
+    console.error('✗', e.message)
+    process.exit(1)
+  }
+}

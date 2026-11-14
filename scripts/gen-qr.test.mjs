@@ -4,6 +4,7 @@
 // оригиналы; телефоны инверсию читают) и декодируем через zbarimg, сверяя с исходной ссылкой.
 
 import { generateSvg } from './gen-qr.mjs'
+import { swapToLight, lightPath, isLightPath } from './qr-theme.mjs'
 import { execFileSync, execSync } from 'node:child_process'
 import { writeFileSync, mkdtempSync } from 'node:fs'
 import { join } from 'node:path'
@@ -49,6 +50,16 @@ const partner = generateSvg('https://t.me/school21sber', { logoSvg: 'public/logo
 ok(partner.includes('<svg x=') && partner.includes('viewBox="0 0 101 101"'), '--logo-svg вкладывает логотип партнёра')
 const partnerLight = generateSvg('https://t.me/school21sber', { logoSvg: 'public/logos/school21.svg', theme: 'light' })
 ok(!/#ffffff/i.test(partnerLight.split('<svg x=')[1]), 'light: белый логотип партнёра перекрашен')
+
+// --- Пара тем: светлая из тёмной без URL совпадает с генерацией light ---
+for (const opts of [{}, { logoSvg: 'public/logos/school21.svg' }, { logo: false }]) {
+  const same = swapToLight(generateSvg('https://css.moscow', opts)) === generateSvg('https://css.moscow', { ...opts, theme: 'light' })
+  ok(same, `--light-from = --theme light (${opts.logoSvg ? 'партнёр' : opts.logo === false ? 'без логотипа' : 'башенка'})`)
+}
+const cc = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path fill="currentColor" d="M0 0h10v10z"/></svg>'
+writeFileSync(join(dir, 'cc.svg'), cc)
+ok(generateSvg('https://x.io', { theme: 'light', logoSvg: join(dir, 'cc.svg') }).includes('fill="#121212" d="M0'), 'light: currentColor в логотипе = цвет модулей')
+ok(lightPath('public/qr/chat.svg') === 'public/qr/chat-light.svg' && isLightPath('a/chat-light.svg') && !isLightPath('a/chat.svg'), 'имена пары <имя>.svg / <имя>-light.svg')
 
 // --- Boundary ---
 let threw = false

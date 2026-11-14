@@ -7,3 +7,12 @@ export function asset(path?: string): string | undefined {
   const base = import.meta.env.BASE_URL || '/'
   return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 }
+
+// QR лежат парой: <имя>.svg (тёмная схема) и <имя>-light.svg (светлая) — так их пишет
+// генератор шаблона (`pnpm qr`). Во frontmatter указываем тёмный файл, светлый тема
+// подставит сама. Внешние ссылки и не-SVG не трогаем.
+export function qrAsset(path: string | undefined, isDark: boolean): string | undefined {
+  if (!path || isDark || !/\.svg$/i.test(path) || /-light\.svg$/i.test(path) || /^(https?:)?\/\//.test(path))
+    return asset(path)
+  return asset(path.replace(/\.svg$/i, '-light.svg'))
+}

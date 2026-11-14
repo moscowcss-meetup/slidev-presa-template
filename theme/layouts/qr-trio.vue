@@ -1,7 +1,8 @@
 <script setup lang="ts">
 // Три QR в ряд, над каждым — плашка-подпись. `items: [{ label, img }]`,
-// внизу `footer` (адрес сайта) и `footerSub`.
-import { asset } from '../utils/asset'
+// внизу `footer` (адрес сайта) и `footerSub`. `img` — тёмный SVG, светлую пару тема подставит сама.
+import { useDarkMode } from '@slidev/client'
+import { qrAsset } from '../utils/asset'
 import { colorsFor, createRandom } from '../utils/pile'
 
 const props = withDefaults(defineProps<{
@@ -13,6 +14,7 @@ const props = withDefaults(defineProps<{
 
 const tones = colorsFor(props.items.length, createRandom(props.seed))
 const tilts = [-4, 3, -2, 4]
+const { isDark } = useDarkMode()
 </script>
 
 <template>
@@ -20,7 +22,7 @@ const tilts = [-4, 3, -2, 4]
     <div class="mc-qrtrio__row">
       <figure v-for="(item, i) in items" :key="item.label" class="mc-qrtrio__cell">
         <Pill :tone="tones[i]" :tilt="tilts[i % tilts.length]">{{ item.label }}</Pill>
-        <div class="mc-qrcard"><img :src="asset(item.img)" :alt="item.label"></div>
+        <div class="mc-qrcard"><img :src="qrAsset(item.img, isDark)" :alt="item.label"></div>
       </figure>
     </div>
     <div v-if="footer" class="mc-qrtrio__footer">

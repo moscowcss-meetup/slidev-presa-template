@@ -42,7 +42,8 @@
 .mc-qrcard {
 	padding: 0.75rem;
 	border-radius: 1.5rem;
-	background: #121212;
+	background: var(--mc-qr-bg);
+	box-shadow: 0 0 0 1px var(--mc-qr-edge);
 	transform: rotate(-3deg);
 }
 
