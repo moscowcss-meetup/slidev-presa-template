@@ -40,6 +40,12 @@ withDefaults(defineProps<{
   border-radius: 999px;
 }
 
+/* В светлой схеме тёмные тона (blue, red) под тёмными цифрами съедают контраст —
+   маркер полупрозрачный, как след текстовыделителя */
+html:not(.dark) .mc-stat__mark {
+  opacity: 0.55;
+}
+
 .mc-stat__label {
   font: 400 1rem/1.4 var(--mc-font-mono);
   color: var(--mc-muted);
