@@ -1,160 +1,124 @@
 # Шаблон презентаций митапа MoscowCSS
 
-Две презентации митапа на [Slidev](https://sli.dev), выделенные из `Moscow_open.pdf` /
-`Moscow_close.pdf`:
+Старт и финал каждого митапа [MoscowCSS](https://css.moscow) на [Slidev](https://sli.dev):
 
-- **старт** — `open.md` (открытие: приветствие, спикеры, QR);
-- **финал** — `close.md` (закрытие: спасибо, оцените митап, редакция).
+- **старт** — [`open.md`](open.md): приветствие, партнёр, QR, спикеры, «Мы начинаем»;
+- **финал** — [`close.md`](close.md): спасибо, партнёр, «Оцените митап», редакция.
 
-Вся вёрстка — в теме `./theme` (slidev-theme-moscowcss: токены, шрифты и фирменные формы
-[css.moscow](https://css.moscow)); на каждый митап меняется только контент в `open.md` /
-`close.md`, дизайн остаётся неизменным.
+Вёрстка живёт в теме [`theme/`](theme/README.md) в стиле css.moscow. На каждый митап меняется
+только контент в `open.md` и `close.md`.
 
-## Запуск
+**Сайт со всеми митапами:** https://moscowcss-meetup.github.io/slidev-presa-template/
+
+> Агенту — начни с [AGENTS.md](AGENTS.md): правила, порядок работы и проверки.
+
+## Быстрый старт
 
 ```bash
 pnpm install
-pnpm dev            # старт (open.md), live-reload → http://localhost:3030
+pnpm dev            # старт (open.md) → http://localhost:3030
 pnpm dev:close      # финал (close.md)
-pnpm build          # сборка старта и финала в dist/<номер>/{open,close}
-pnpm build 32       # то же для митапа 32
+pnpm build          # сборка → dist/<номер>/{open,close} + лендинг dist/index.html
+pnpm test:qr        # проверка генератора QR
 ```
 
-## Сборка митапов
+## Карта репозитория
 
-`pnpm build` собирает оба дека в папки по номеру митапа:
+| Где | Что | Документация |
+|-----|-----|--------------|
+| [`open.md`](open.md), [`close.md`](close.md) | контент текущего митапа | [Слайды старта и финала](#слайды-старта-и-финала) |
+| [`theme/`](theme/) | тема: layout'ы, компоненты, токены, шрифты, светлая/тёмная схема | [theme/README.md](theme/README.md) |
+| [`scripts/`](scripts/) | сборка, архив прошлых митапов, генератор QR | [scripts/README.md](scripts/README.md) |
+| [`public/`](public/) | QR-коды (пары тёмный/светлый), логотипы, фото | [public/README.md](public/README.md) |
+| [`archive/`](archive/) | прошлые митапы: копии деков и коммиты для сайта | [archive/README.md](archive/README.md) |
+| [`.github/workflows/pages.yml`](.github/workflows/pages.yml) | деплой на GitHub Pages при пуше в `master` | [Деплой и история](#деплой-и-история) |
+
+## Подготовка нового митапа
+
+На примере перехода с 32 на 33:
+
+1. **Сохранить историю.** Добавьте в [`archive/meetups.json`](archive/meetups.json) строку
+   `"32": "<sha последнего коммита 32-го>"` (`git rev-parse HEAD`), скопируйте `open.md` →
+   `archive/32.md` и `close.md` → `archive/32-close.md`. Подробнее — в [archive/README.md](archive/README.md).
+2. **Сменить номер:** `"meetup": "33"` в [`package.json`](package.json).
+3. **Собрать данные с сайта.** Митап, доклады, спикеры и партнёры лежат в репо css.moscow:
+   `packages/content/src/{events,talks,speakers,partners}`.
+4. **Обновить контент** по таблицам ниже: обложку, партнёра, спикеров, форму «Оцените митап».
+5. **Сгенерировать QR** партнёра и формы обратной связи. Генератор сразу пишет пару для тёмной
+   и светлой схемы:
+   ```bash
+   pnpm qr https://t.me/partner partner --logo-svg public/logos/partner.svg
+   pnpm qr https://forms.yandex.ru/u/<id>/ rate-33
+   ```
+   Подробнее — в [scripts/README.md → QR](scripts/README.md#генератор-qr-кодов).
+6. **Проверить:** `pnpm dev` и `pnpm dev:close` — каждый слайд влезает, QR читается телефоном.
+7. **Запушить в `master`** — сайт обновится сам.
+
+## Слайды старта и финала
+
+Всё редактируется во frontmatter слайда (между `---`). Поля каждого layout'а с примерами —
+в [theme/README.md](theme/README.md#layoutы).
+
+### Старт — `open.md`
+
+| # | Layout | Слайд | Что менять |
+|---|--------|-------|-----------|
+| 1 | [`cover`](theme/README.md#cover) | Обложка | `badge`, `date`, `time`, `tags`, `meetup` и номер `**33**` |
+| 2 | [`statement`](theme/README.md#statement) | «Приветствуем на N митапе» | номер |
+| 3 | [`qr-side`](theme/README.md#qr-side) | Спасибо партнёру | `qr`, `title`, текст |
+| 4 | [`qr-trio`](theme/README.md#qr-trio) | Анонсы / общение / подать доклад | не меняется |
+| 5 | `statement` | «Спасибо замечательным спикерам» | не меняется |
+| 6+ | [`speaker`](theme/README.md#speaker) | Спикер, по слайду на доклад | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
+| | [`logo-side`](theme/README.md#logo-side) | Активность | `title` и текст |
+| | `qr-side` | Вопросы в чат `#вопрос_спикеру` | не меняется |
+| | `statement` ×2 | «Вы готовы?» / «Мы начинаем» | не меняется |
+
+### Финал — `close.md`
+
+| # | Layout | Слайд | Что менять |
+|---|--------|-------|-----------|
+| 1 | `statement` | «Спасибо» | не меняется |
+| 2 | `qr-side` | Спасибо партнёру | `qr`, `title`, текст |
+| 3 | `qr-side` | «Подавайте доклад» | не меняется |
+| 4 | `qr-side` | «Оцените митап» | **QR формы — каждый митап** |
+| 5 | `qr-side` | BeerJS Moscow | не меняется |
+| 6 | [`photo-grid`](theme/README.md#photo-grid) | «Наша редакция» | `images` из `public/img/team/` |
+| 7 | `statement` + `note` | «Go пить ПИВО¹» | не меняется |
+
+Ещё есть [`full-image`](theme/README.md#full-image): фото в край слайда, например со стенда на
+конференции.
+
+## Светлая и тёмная схема
+
+Деки идут в тёмной схеме (`colorSchema: dark` в headmatter `open.md`/`close.md`), как всегда на
+митапах. Тема поддерживает и светлую: поставьте `colorSchema: light`, а с `auto` схема
+переключается кнопкой Slidev. Для QR ничего делать не нужно: во frontmatter указывается тёмный
+файл, а в светлой схеме тема сама берёт его пару `-light.svg`. Подробнее — в
+[theme/README.md → Светлая и тёмная схема](theme/README.md#светлая-и-тёмная-схема).
+
+## Деплой и история
+
+При пуше в `master` [workflow](.github/workflows/pages.yml) собирает сайт и публикует его на
+GitHub Pages:
+
+1. `pnpm build:archive` пересобирает прошлые митапы из **их собственных коммитов** по
+   [`archive/meetups.json`](archive/meetups.json), поэтому история выглядит ровно как тогда;
+2. `pnpm build` собирает текущий митап и лендинг со списком всех митапов.
 
 ```
-dist/31/open/     ← старт митапа №31 (самодостаточный сайт)
-dist/31/close/    ← финал митапа №31
+dist/index.html      ← лендинг: все митапы со ссылками
+dist/32/open/        ← старт митапа 32 (самодостаточный сайт, hash-роутинг)
+dist/32/close/       ← финал
+dist/31/...          ← прошлые митапы из archive/meetups.json
 ```
 
-Номер берётся из поля `"meetup"` в `package.json` (сейчас `32`), либо из аргумента
-(`pnpm build 32`), либо из env (`MEETUP=33 pnpm build`). Для следующего митапа: правите
-контент в `open.md`/`close.md`, меняете `meetup` на 32 — и `pnpm build` кладёт всё в `dist/32/…`.
-
-**История на сайте.** Прошлые митапы не пропадают с GitHub Pages: `pnpm build:archive`
-пересобирает каждый из своего коммита по `archive/meetups.json` (`"номер": "sha"`) — со своими
-layout'ами и темой, ровно как тогда. CI запускает его перед `pnpm build`. **Перед переходом к
-следующему митапу** допишите в `archive/meetups.json` номер текущего и sha его последнего
-коммита (`git rev-parse HEAD`), скопируйте `open.md`/`close.md` в `archive/` — и правьте контент.
-
-**Показ/деплой:** каждая папка `dist/<N>/<deck>` — самодостаточный сайт, отдаётся **из своего
-корня** (hash-роутинг, работает под любым путём и даже при открытии файла). Локально:
+Номер текущего митапа берётся из `"meetup"` в `package.json`, из аргумента (`pnpm build 33`)
+или из env (`MEETUP=33 pnpm build`). Каждая папка `dist/<N>/<deck>` открывается из любого пути и
+даже как файл:
 
 ```bash
-cd dist/31/open && python3 -m http.server   # → http://localhost:8000
+cd dist/32/open && python3 -m http.server   # → http://localhost:8000
 ```
-
-## Структура
-
-```
-open.md           ← старт: открывающий дек (правят на каждый митап)
-close.md          ← финал: закрывающий дек
-archive/<N>.md    ← деки прошлых митапов (перед новым митапом копируем сюда open/close)
-theme/            ← тема: layouts/, components/, styles/ (токены), fonts/, utils/
-scripts/          ← build.mjs (сборка), gen-qr.mjs (генератор QR)
-public/
-  logo.svg        ← логотип-башенка (вектор)
-  qr/             ← QR-коды (SVG)
-  img/            ← фото стенда; img/speakers/ — спикеры; img/team/ — фото редакции
-```
-
-### Layouts
-
-`cover` (герой css.moscow: куча плашек, вордмарк, стикер) · `statement` (+ опц. `note:`
-сноска, `tags:` куча плашек) · `qr-side` · `qr-trio` · `speaker` · `logo-side` (звезда
-Moscow CSS) · `full-image` (фото в край) · `photo-grid` (сетка фото в восьмиугольниках).
-Плюс общие `default`, `section`, `end`.
-
-Компоненты темы, доступные прямо в markdown: `<Pill>`, `<PillPile>` (падающая куча плашек),
-`<Octagon>` (стикер или фото в рамке), `<Stat>`, `<Snowfall>`, `<StarMark>`.
-
-## Старт — открывающий дек (`open.md`)
-
-| Layout | Слайд | Правка |
-|--------|-------|--------|
-| `cover` | Обложка | `badge`, `date`, `time`, `tags` во frontmatter + номер `**32**` |
-| `statement` | Приветствие | номер |
-| `qr-side` | Спонсор/площадка | под партнёра |
-| `qr-trio` | Три QR (анонсы/чат/доклад) | не меняется |
-| `statement` | «Спасибо спикерам» | не меняется |
-| `speaker` ×N | Спикеры | заполнить каждого |
-| `logo-side` | Активность/анонс | текст |
-| `qr-side` | Вопросы в чат | не меняется |
-| `statement` ×2 | «Вы готовы?» / «Мы начинаем» | не меняется |
-
-## Финал — закрывающий дек (`close.md`)
-
-| Layout | Слайд | Правка |
-|--------|-------|--------|
-| `statement` | «Спасибо» | не меняется |
-| `qr-side` | Спонсор | под партнёра |
-| `qr-side` | «Подавайте доклад» | не меняется |
-| `qr-side` | «Оцените митап» | QR формы обратной связи — каждый митап |
-| `statement` | «Стендил на …» | конференция |
-| `full-image` | Фото со стенда | `public/img/holyjs.jpg` |
-| `statement` | «Знакомиться заново» | не меняется |
-| `photo-grid` | «Наша редакция» | сетка `public/img/team/` |
-| `statement` + note | «Go пить ПИВО¹» | не меняется |
-
-## Как менять контент
-
-Всё редактируется во frontmatter слайда (между `---`).
-
-**Спикер** (`speaker`): `name`, `role`, `photo` (в `public/img/speakers/`), `pitch`, `talk`
-(без кавычек — «ёлочки» добавит шаблон), `tone` — цвет рамки (`red`/`orange`/`yellow`/`sky`/
-`blue`/`green`). Без `photo` — восьмиугольник с «?» (спикер ещё секрет). Данные берём из
-контента сайта: `packages/content/src/{events,talks,speakers}` репо css.moscow.
-
-**Крупная фраза** (`statement`): текст в теле слайда, перенос `<br>`, красный акцент
-`[текст]{.accent}`, опциональная сноска — `note:`, куча плашек в углу — `tags:`.
-
-**QR сбоку** (`qr-side`): `qr:` — путь к SVG, `title:` — заголовок, тело — описание.
-
-**Сетка фото** (`photo-grid`): `title:` + `images:` (список путей), `cols:` (по умолчанию 4).
-
-## Генератор QR-кодов
-
-QR в фирменном стиле (кружки-модули, кольцевые «глазки», логотип по центру) — в SVG:
-
-```bash
-pnpm qr <url> [имя]
-pnpm qr https://css.moscow site                                  # → public/qr/site.svg
-pnpm qr https://css.moscow site-light --theme light              # светлая тема
-pnpm qr https://t.me/school21sber school21 --logo-svg public/logos/school21.svg
-```
-
-**Темы** (`--theme`): `dark` по умолчанию — белое на тёмном `#121212`, как в оригинальных
-слайдах и в тёмной карточке темы; `light` — тёмное на белом. В светлой теме логотип
-перекрашивается сам: белые штрихи → цвет модулей, тёмная подложка башенки → цвет фона,
-красное «CSS» остаётся.
-
-**Логотип партнёра** (`--logo-svg путь.svg`): любой SVG с `viewBox` вместо башенки — например,
-«21» Школы 21 (`public/logos/`, логотипы берём из `packages/content/src/partners/assets` сайта).
-Белый или `currentColor` в логотипе подстраивается под тему.
-
-Остальные флаги: `--out путь.svg`, `--bg none` (прозрачный), `--fg #цвет` (перекрывают тему),
-`--no-logo`, `--logo 0.24` (доля QR под логотип). Коррекция ошибок **H** (30%) — логотип по
-центру не мешает сканированию. Проверка: `pnpm test:qr` (структура + декод через zbarimg,
-если он установлен).
-
-## Дизайн-токены (`theme/styles/tokens.css`)
-
-Токены и шрифты — из дизайн-системы css.moscow (`@moscowcss/design-system`, `@moscowcss/fonts`).
-Дек в тёмной схеме (`colorSchema: dark`), тема поддерживает и светлую.
-
-| Токен | Тёмная | Назначение |
-|-------|--------|------------|
-| `--mc-bg` | `#23252b` графит | фон |
-| `--mc-text` | `#ecebe6` paper | текст |
-| `--mc-muted` | `#a6a8b0` | подписи, роли |
-| `--mc-accent` | `#9aa5ff` | дата, логотип, ссылки |
-| `--mc-red` | `#f05133` | акцент `.accent`, `**32**` в обложке |
-| `--mc-tone-*` | sky / blue / yellow / red / orange / green | плашки и рамки |
-
-Шрифты лежат в `theme/fonts`, без CDN: **Jost** — вордмарк и крупные фразы, **Montserrat** —
-заголовки, **Golos Text** — текст, **JetBrains Mono** — плашки и подписи.
 
 ## Экспорт в PDF
 
