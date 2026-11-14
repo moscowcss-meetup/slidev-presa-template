@@ -1,0 +1,77 @@
+/* Токены css.moscow (@moscowcss/design-system: palette.ts + colors.ts).
+   Светлая тема — белый фон и тёплый «чёрный» ink, тёмная — графит и paper.
+   База 1rem = 16px, мельче 1rem текст не опускаем. */
+
+:root {
+	/* Палитра (примитивы) */
+	--mc-ink: #0b0400;
+	--mc-paper: #ecebe6;
+	--mc-graphite: #23252b;
+	--mc-graphite-deep: #16181d;
+	--mc-graphite-line: #4a4d56;
+	--mc-red: #f05133;
+	--mc-orange: #f16528;
+	--mc-yellow: #f9dc3e;
+	--mc-green: #70dc55;
+	--mc-sky: #8ed6fb;
+	--mc-blue: #3845cf;
+	--mc-blue-soft: #5563e8;
+	--mc-blue-pale: #9aa5ff;
+	--mc-pink: #ff4e8d;
+	--mc-violet: #7a2bff;
+
+	/* Семантика: светлая тема */
+	--mc-bg: #ffffff;
+	--mc-text: var(--mc-ink);
+	--mc-muted: #494949;
+	--mc-border: var(--mc-ink);
+	--mc-divider: #c4c4c4;
+	--mc-accent: var(--mc-blue);
+	--mc-highlight: var(--mc-pink);
+	--mc-sticker-bg: var(--mc-ink);
+	--mc-on-sticker: var(--mc-paper);
+	--mc-card-bg: #f4f3ef;
+
+	/* Цветные плашки: подложка / текст на ней */
+	--mc-tone-sky: var(--mc-sky);
+	--mc-on-tone-sky: var(--mc-ink);
+	--mc-tone-blue: var(--mc-blue);
+	--mc-on-tone-blue: #ffffff;
+	--mc-tone-yellow: var(--mc-yellow);
+	--mc-on-tone-yellow: var(--mc-ink);
+	--mc-tone-red: var(--mc-red);
+	--mc-on-tone-red: var(--mc-ink);
+	--mc-tone-orange: var(--mc-orange);
+	--mc-on-tone-orange: var(--mc-ink);
+	--mc-tone-green: var(--mc-green);
+	--mc-on-tone-green: var(--mc-ink);
+
+	/* Шрифты */
+	--mc-font-display: "Jost", system-ui, sans-serif;
+	--mc-font-title: "Montserrat", system-ui, sans-serif;
+	--mc-font-text: "Golos Text", system-ui, sans-serif;
+	--mc-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+	/* Движение: «падение с отскоком» плашек с сайта */
+	--mc-ease-fall: cubic-bezier(0.33, 1.3, 0.6, 1);
+	--mc-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+	--mc-octagon: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+	--mc-pad-block: 2rem;
+	--mc-pad-inline: 3rem;
+
+	--slidev-theme-primary: var(--mc-accent);
+}
+
+html.dark {
+	--mc-bg: var(--mc-graphite);
+	--mc-text: var(--mc-paper);
+	--mc-muted: #a6a8b0;
+	--mc-border: var(--mc-paper);
+	--mc-divider: var(--mc-graphite-line);
+	--mc-accent: var(--mc-blue-pale);
+	--mc-sticker-bg: #e4ded3;
+	--mc-on-sticker: var(--mc-ink);
+	--mc-card-bg: var(--mc-graphite-deep);
+	--mc-tone-blue: var(--mc-blue-soft);
+}

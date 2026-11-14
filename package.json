@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.10.0",
-  "meetup": "31",
+  "meetup": "32",
   "scripts": {
     "dev": "slidev open.md --open",
     "dev:close": "slidev close.md --open",
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@slidev/cli": "^52.16.0",
-    "@slidev/theme-default": "^0.25.0",
     "qrcode": "^1.5.4"
   }
 }

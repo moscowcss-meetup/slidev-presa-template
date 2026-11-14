@@ -74,15 +74,16 @@ function writeIndex(distDir) {
   const html = `<!doctype html><html lang="ru"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MoscowCSS — презентации</title>
+<!-- палитра и шрифты — как в ./theme (css.moscow) -->
 <style>
   body{margin:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-    align-items:center;gap:2rem;background:#121212;color:#fff;font-family:Montserrat,system-ui,sans-serif}
-  h1{font-weight:800;font-size:2rem;margin:0 0 1.5rem}
+    align-items:center;gap:2rem;background:#23252b;color:#ecebe6;font-family:'Golos Text',system-ui,sans-serif}
+  h1{font-family:Jost,system-ui,sans-serif;font-weight:400;font-size:2.5rem;margin:0 0 1.5rem}
   ul{list-style:none;padding:0;display:grid;gap:.8rem}
   li{display:flex;gap:1rem;align-items:center;font-size:1.1rem}
   li b{min-width:7rem}
-  a{color:#ca3035;text-decoration:none;padding:.3rem .8rem;border:1px solid #ca3035;border-radius:.4rem}
-  a:hover{background:#ca3035;color:#fff}
+  a{color:#0b0400;background:#8ed6fb;text-decoration:none;padding:.4rem 1rem;border-radius:999px;font-family:'JetBrains Mono',monospace}
+  a:hover{background:#f9dc3e}
 </style>
 <h1>MoscowCSS — презентации</h1>
 <ul>${rows.join('')}</ul>`

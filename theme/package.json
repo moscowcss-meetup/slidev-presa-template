@@ -1,0 +1,18 @@
+{
+  "name": "slidev-theme-moscowcss",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "keywords": ["slidev-theme", "slidev"],
+  "//": "Копия slidev-theme-moscowcss (токены и шрифты css.moscow). Тема подключается из open.md/close.md: theme: ./theme",
+  "slidev": {
+    "colorSchema": "both",
+    "defaults": {
+      "fonts": {
+        "sans": "Golos Text",
+        "mono": "JetBrains Mono",
+        "provider": "none"
+      }
+    }
+  }
+}

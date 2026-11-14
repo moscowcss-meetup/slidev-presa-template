@@ -1,0 +1,171 @@
+/* База слайда и типографика. Канвас 980×551: поля 2rem/3rem, мельче 1rem не идём. */
+
+.slidev-layout {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: var(--mc-pad-block) var(--mc-pad-inline);
+	background: var(--mc-bg);
+	color: var(--mc-text);
+	font: 400 1.25rem/1.55 var(--mc-font-text);
+	letter-spacing: 0.005em;
+}
+
+.slidev-layout h1 {
+	width: fit-content;
+	max-width: 100%;
+	margin: 0 0 1.5rem;
+	padding: 0.6rem 1.4rem 0.5rem;
+	border: 0.25rem dashed var(--mc-border);
+	font: 400 2rem/1.15 var(--mc-font-title);
+	letter-spacing: 0.02em;
+}
+
+.slidev-layout h2 {
+	margin: 0 0 0.75rem;
+	font: 600 1.5rem/1.25 var(--mc-font-title);
+	letter-spacing: -0.01em;
+}
+
+.slidev-layout h3 {
+	margin: 0 0 0.5rem;
+	font: 600 1.25rem/1.3 var(--mc-font-title);
+	text-transform: uppercase;
+}
+
+.slidev-layout p {
+	margin: 0 0 0.75rem;
+}
+
+.slidev-layout strong {
+	font-family: var(--mc-font-title);
+	font-weight: 600;
+}
+
+.slidev-layout a {
+	color: var(--mc-accent);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* Списки — как строка «/ оффлайн / онлайн / бесплатно» на сайте. */
+.slidev-layout ul:not(.mc-pile) {
+	margin: 0 0 0.75rem;
+	padding: 0;
+	list-style: none;
+}
+
+.slidev-layout ul:not(.mc-pile) > li {
+	position: relative;
+	margin-bottom: 0.4rem;
+	padding-left: 1.6rem;
+}
+
+.slidev-layout ul:not(.mc-pile) > li::before {
+	content: "/";
+	position: absolute;
+	left: 0.2rem;
+	color: var(--mc-accent);
+	font: 700 1.25rem/1.55 var(--mc-font-mono);
+}
+
+.slidev-layout ol {
+	padding-left: 1.75rem;
+}
+
+.slidev-layout :not(pre) > code {
+	padding: 0.1em 0.45em;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--mc-tone-sky) 28%, transparent);
+	font: 500 0.9em var(--mc-font-mono);
+}
+
+.slidev-layout blockquote {
+	margin: 0 0 0.75rem;
+	padding: 0.75rem 1.25rem;
+	border-left: 0.5rem solid var(--mc-highlight);
+	background: var(--mc-card-bg);
+	font-size: 1.25rem;
+}
+
+/* Общие куски: логотип, шапка, подвал, бейдж, пометка */
+
+.mc-logo {
+	color: var(--mc-accent);
+	font: 400 1.25rem/1 var(--mc-font-display);
+	letter-spacing: 0.02em;
+}
+
+.mc-topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--mc-divider);
+}
+
+.mc-topbar__meta,
+.mc-kicker,
+.mc-footer__page {
+	font: 400 1rem/1.4 var(--mc-font-mono);
+	color: var(--mc-muted);
+}
+
+.mc-kicker {
+	position: absolute;
+	top: calc(var(--mc-pad-block) + 0.9rem);
+	right: var(--mc-pad-inline);
+	color: var(--mc-accent);
+}
+
+.mc-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: auto;
+	padding-top: 0.5rem;
+}
+
+.mc-footer .mc-logo {
+	font-size: 1rem;
+}
+
+.mc-badge {
+	padding: 0.5rem 1.1rem;
+	border: 1px dashed var(--mc-border);
+	border-radius: 0.5rem;
+	font: 500 1rem/1 var(--mc-font-mono);
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+/* Плашка-пилюля. Глобально, а не в Pill.vue: CSS компонента грузится с его чанком,
+   и PillPile на титуле иначе рисуется без стилей, пока Pill не подгружен. */
+.mc-pill {
+	display: inline-block;
+	padding: 0.55em 1.15em;
+	border-radius: 999px;
+	font: 500 1.125rem/1 var(--mc-font-mono);
+	white-space: nowrap;
+	transform: rotate(var(--tilt, 0deg));
+}
+
+/* default */
+
+.mc-default__body {
+	flex: 1;
+	min-height: 0;
+}
+
+/* Карточка для сеток в контенте: <div class="mc-card">…</div> */
+.mc-card {
+	padding: 1rem 1.25rem;
+	border-radius: 1.25rem;
+	background: var(--mc-card-bg);
+}
+
+.mc-card > :last-child {
+	margin-bottom: 0;
+}

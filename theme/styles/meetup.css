@@ -1,0 +1,222 @@
+/* Layout'ы деков открытия/закрытия митапа: statement, qr-side, qr-trio, speaker,
+   logo-side, full-image, photo-grid. */
+
+/* --- statement --- */
+
+.mc-statement {
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.mc-statement__text {
+	font: 400 5.5rem/0.95 var(--mc-font-display);
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+}
+
+.mc-statement__text p {
+	margin: 0;
+}
+
+.mc-statement__note {
+	margin-top: 1.25rem;
+	color: var(--mc-muted);
+	font: 400 1rem/1.4 var(--mc-font-mono);
+}
+
+.mc-statement__pile {
+	position: absolute;
+	right: var(--mc-pad-inline);
+	bottom: var(--mc-pad-block);
+	max-width: 20rem;
+}
+
+/* Акцент [текст]{.accent} — цветом, как «CSS» в логотипе. */
+.slidev-layout .accent {
+	color: var(--mc-red);
+}
+
+/* --- QR-карточка: тёмная подложка в тон фону сгенерированных QR (#121212) --- */
+
+.mc-qrcard {
+	padding: 0.75rem;
+	border-radius: 1.5rem;
+	background: #121212;
+	transform: rotate(-3deg);
+}
+
+.mc-qrcard > img {
+	display: block;
+	width: 100%;
+	border-radius: 1rem;
+}
+
+/* --- qr-side --- */
+
+.mc-qrside {
+	display: grid;
+	grid-template-columns: 19rem 1fr;
+	align-items: center;
+	gap: 3.5rem;
+}
+
+.mc-qrside__qr {
+	position: relative;
+}
+
+.mc-qrside__sticker {
+	position: absolute;
+	top: -2.5rem;
+	right: -2.5rem;
+}
+
+.mc-qrside__content h1 {
+	margin-bottom: 1.25rem;
+}
+
+.mc-qrside__body {
+	color: var(--mc-muted);
+	font-size: 1.375rem;
+}
+
+.mc-qrside__body strong {
+	color: var(--mc-text);
+	background: color-mix(in srgb, var(--mc-tone-yellow) 35%, transparent);
+	padding: 0 0.3em;
+	border-radius: 999px;
+}
+
+/* --- qr-trio --- */
+
+.mc-qrtrio {
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+}
+
+.mc-qrtrio__row {
+	display: flex;
+	gap: 2.5rem;
+}
+
+.mc-qrtrio__cell {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.9rem;
+	width: 14rem;
+	margin: 0;
+}
+
+.mc-qrtrio__cell .mc-qrcard {
+	width: 100%;
+}
+
+.mc-qrtrio__footer {
+	display: flex;
+	align-items: baseline;
+	gap: 1rem;
+}
+
+.mc-qrtrio__site {
+	color: var(--mc-accent);
+	font: 400 2rem/1 var(--mc-font-display);
+}
+
+.mc-qrtrio__sub {
+	color: var(--mc-muted);
+	font: 400 1rem/1 var(--mc-font-mono);
+}
+
+/* --- speaker --- */
+
+.mc-speaker {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	gap: 3rem;
+}
+
+.mc-speaker .mc-speaker__name {
+	margin: 0 0 0.4rem;
+	padding: 0;
+	border: 0;
+	font: 400 3.25rem/1 var(--mc-font-display);
+	letter-spacing: -0.01em;
+}
+
+.mc-speaker__role {
+	margin-bottom: 1rem;
+	color: var(--mc-muted);
+	font: 400 1rem/1.4 var(--mc-font-mono);
+}
+
+.mc-speaker__pitch {
+	font-size: 1.25rem;
+}
+
+.mc-speaker__label {
+	margin-top: 0.5rem;
+	color: var(--mc-accent);
+	font: 700 1rem/1.4 var(--mc-font-mono);
+}
+
+.slidev-layout .mc-speaker__talk {
+	margin: 0.25rem 0 0;
+	font: 600 1.5rem/1.25 var(--mc-font-title);
+	text-transform: uppercase;
+}
+
+.mc-speaker__secret {
+	font: 400 10rem/1 var(--mc-font-display);
+}
+
+/* --- logo-side --- */
+
+.mc-logoside {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: 4rem;
+	padding-left: 5rem;
+}
+
+.mc-logoside__star {
+	color: var(--mc-yellow);
+}
+
+.mc-logoside__body {
+	font-size: 1.5rem;
+}
+
+/* --- full-image --- */
+
+.mc-fullimg {
+	justify-content: flex-end;
+	background-size: cover;
+	background-position: center;
+}
+
+.mc-fullimg__caption {
+	width: fit-content;
+	padding: 0.6rem 1.25rem;
+	border-radius: 999px;
+	background: var(--mc-sticker-bg);
+	color: var(--mc-on-sticker);
+	font: 500 1.25rem/1.3 var(--mc-font-mono);
+	transform: rotate(-2deg);
+}
+
+.mc-fullimg__caption p {
+	margin: 0;
+}
+
+/* --- photo-grid --- */
+
+.mc-photogrid__grid {
+	display: grid;
+	justify-content: center;
+	gap: 1.25rem 2rem;
+	margin-top: 0.5rem;
+}
