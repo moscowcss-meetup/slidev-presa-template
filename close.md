@@ -1,11 +1,7 @@
 ---
-# Закрывающий дек митапа MoscowCSS. Тема/вёрстка — те же style.css + layouts/*.vue.
-theme: default
+# Закрывающий дек митапа MoscowCSS. Тема (вёрстка, токены, шрифты css.moscow) — та же ./theme.
+theme: ./theme
 title: MoscowCSS Meetup — закрытие
-fonts:
-  sans: Montserrat
-  weights: '400,500,600,700,800'
-  fallbacks: true
 mdc: true
 colorSchema: dark
 transition: fade
@@ -21,14 +17,13 @@ layout: statement
 
 ---
 layout: qr-side
-qr: /qr/zvuk.svg
-title: Спасибо Звуку за это
+qr: /qr/school21.svg
+title: Спасибо Школе 21 за это
 ---
 
 <!-- 2. СПОНСОР/ПЛОЩАДКА — меняется под партнёра -->
 
-Подпишитесь на телеграм-канал Звук Tech, чтобы узнать больше о внутрянке разработки,
-карьерных треках и вакансиях!
+Бесплатная школа цифровых технологий от Сбера. Подписывайтесь на телеграм-канал **@school21sber**!
 
 ---
 layout: qr-side
@@ -46,7 +41,7 @@ qr: /qr/forms.yandex.ru-u-6a4eae811f1eb545dd30bd09.svg
 title: Оцените митап
 ---
 
-<!-- 4. ОЦЕНИТЕ МИТАП — QR формы обратной связи меняется каждый митап (pnpm qr <url> rate) -->
+<!-- 4. ОЦЕНИТЕ МИТАП — QR формы обратной связи меняется каждый митап (pnpm qr <url> rate). TODO: форма 32 митапа, сейчас стоит форма 31 -->
 
 Мы хотим стать лучше для вас, а спикеры хотят узнать, как вам их доклад и подача.
 
