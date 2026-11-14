@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Крупная цифра со подписью: «108 / докладов». Плашка цвета tone подчёркивает число.
+// Крупная цифра с подписью: «108 / докладов». Плашка цвета tone подчёркивает число снизу.
 withDefaults(defineProps<{
   value: string | number
   label: string
@@ -25,10 +25,13 @@ withDefaults(defineProps<{
   gap: 0.35rem;
 }
 
+/* Маркер — толстое подчёркивание в своём нижнем отступе, а не заливка под цифрами:
+   под светлыми цифрами тёмной схемы (и тёмными — светлой) любой тон съедал контраст. */
 .mc-stat__value {
   position: relative;
   isolation: isolate;
   width: fit-content;
+  padding-bottom: 0.3em;
   font: 400 3.75rem/1 var(--mc-font-display);
   letter-spacing: -0.01em;
 }
@@ -36,14 +39,11 @@ withDefaults(defineProps<{
 .mc-stat__mark {
   position: absolute;
   z-index: -1;
-  inset: 55% -0.4rem -0.1rem -0.4rem;
+  right: -0.4rem;
+  bottom: 0;
+  left: -0.4rem;
+  height: 0.26em;
   border-radius: 999px;
-}
-
-/* В светлой схеме тёмные тона (blue, red) под тёмными цифрами съедают контраст —
-   маркер полупрозрачный, как след текстовыделителя */
-html:not(.dark) .mc-stat__mark {
-  opacity: 0.55;
 }
 
 .mc-stat__label {
