@@ -1,12 +1,16 @@
 #!/usr/bin/env node
-// Генератор QR-кодов в дизайне MoscowCSS: белые кружки-модули, кольцевые «глазки»,
-// логотип-башенка по центру, тёмный фон. Выдаёт SVG.
+// Генератор QR-кодов в дизайне MoscowCSS: кружки-модули, кольцевые «глазки», логотип по
+// центру. Две темы: dark (белое на тёмном, как в оригинальных слайдах) и light (тёмное на
+// белом). Логотип — башенка MoscowCSS или логотип партнёра (--logo-svg). Выдаёт SVG.
 //
 // Использование:
-//   node scripts/gen-qr.mjs <url> [имя] [--out путь.svg] [--bg #121212|none]
-//                            [--fg #ffffff] [--no-logo] [--logo N] [--cell N]
+//   node scripts/gen-qr.mjs <url> [имя] [--out путь.svg] [--theme dark|light]
+//                            [--bg #121212|none] [--fg #ffffff] [--no-logo]
+//                            [--logo-svg путь.svg] [--logo N] [--cell N]
 // Примеры:
-//   pnpm qr https://css.moscow site          → public/qr/site.svg
+//   pnpm qr https://css.moscow site                         → public/qr/site.svg
+//   pnpm qr https://css.moscow site-light --theme light     → светлый вариант
+//   pnpm qr https://t.me/school21sber school21 --logo-svg public/logos/school21.svg
 //   pnpm qr https://t.me/moscowcss chat --bg none
 
 import QRCode from 'qrcode'
@@ -16,10 +20,20 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
-// Токены дизайна — совпадают со style.css
+// Темы: цвет модулей (fg) и фона (bg). --fg/--bg переопределяют тему.
+export const THEMES = {
+  dark: { fg: '#ffffff', bg: '#121212' },  // как оригинальные слайды и .mc-qrcard темы
+  light: { fg: '#121212', bg: '#ffffff' },
+}
+
+// Цвета в логотипах, которые светлая тема меняет местами: белые штрихи → цвет модулей,
+// тёмная подложка башенки → цвет фона. Остальное (красное «CSS») не трогаем.
+// (?![0-9a-f]) — чтобы #fff не съел начало цвета вроде #fffe00
+const WHITE = /#fff(?:fff)?(?![0-9a-f])|rgb\(100%, 100%, 100%\)|\bwhite\b/gi
+const PLATE = /#121212(?![0-9a-f])|rgb\(7\.058716%, 7\.058716%, 7\.058716%\)/gi
+
 const DEFAULTS = {
-  fg: '#ffffff',   // модули и глазки
-  bg: '#121212',   // фон (как --mcss-bg); 'none' → прозрачный
+  theme: 'dark',
   cell: 10,        // px на модуль в SVG-координатах
   quiet: 4,        // тихая зона в модулях (требование стандарта, иначе не сканируется)
   dot: 0.48,       // радиус кружка-модуля в долях клетки (как в оригинале — полные, но раздельные)
@@ -27,12 +41,14 @@ const DEFAULTS = {
 }
 
 function parseArgs(argv) {
-  const opts = { ...DEFAULTS, logo: true }
+  const opts = { logo: true }
   const positional = []
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--no-logo') opts.logo = false
     else if (a === '--out') opts.out = argv[++i]
+    else if (a === '--theme') opts.theme = argv[++i]
+    else if (a === '--logo-svg') opts.logoSvg = argv[++i]
     else if (a === '--bg') opts.bg = argv[++i]
     else if (a === '--fg') opts.fg = argv[++i]
     else if (a === '--logo') opts.logoFrac = Number(argv[++i])
@@ -51,20 +67,39 @@ function safeName(name, url) {
   return base.replace(/^-+|-+$/g, '').slice(0, 64) || 'qr'
 }
 
-// Вкладываем logo.svg как <svg> с его собственным viewBox — масштаб по центру зоны
-function loadLogo() {
-  const p = resolve(ROOT, 'public/logo.svg')
-  if (!existsSync(p)) return null
+// Вкладываем логотип как <svg> с его собственным viewBox — масштаб по центру зоны.
+// file — свой логотип (партнёр); без него — башенка public/logo.svg.
+function loadLogo(file) {
+  const p = file ? (isAbsolute(file) ? file : resolve(ROOT, file)) : resolve(ROOT, 'public/logo.svg')
+  if (!existsSync(p)) {
+    if (file) throw new Error(`нет файла логотипа: ${file}`)
+    return null
+  }
   const raw = readFileSync(p, 'utf8')
   const viewBox = raw.match(/viewBox="([^"]+)"/)?.[1]
+  if (!viewBox) throw new Error(`у логотипа нет viewBox: ${p}`)
   const inner = raw.replace(/<\?xml[^>]*\?>/, '').replace(/<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '')
-  if (!viewBox) return null
   return { viewBox, inner }
+}
+
+// Перекраска логотипа под тему: currentColor всегда = цвет модулей; в light белое и
+// тёмная подложка меняются местами (через маркер, чтобы замены не наложились).
+function themeLogo(inner, theme, fg, bg) {
+  let out = inner.replace(/currentColor/g, fg)
+  if (theme === 'light') {
+    out = out.replace(PLATE, '__QR_BG__').replace(WHITE, fg).replace(/__QR_BG__/g, bg === 'none' ? 'none' : bg)
+  }
+  return out
 }
 
 export function generateSvg(url, options = {}) {
   const o = { ...DEFAULTS, logo: true, ...options }
   if (!url || typeof url !== 'string') throw new Error('нужен URL/текст первым аргументом')
+  const palette = THEMES[o.theme]
+  if (!palette) throw new Error(`неизвестная тема: ${o.theme} (есть: ${Object.keys(THEMES).join(', ')})`)
+  // undefined в options не должен затирать цвета темы
+  const fg = o.fg ?? palette.fg
+  const bg = o.bg ?? palette.bg
 
   // ECC 'H' (30% восстановления) — чтобы логотип по центру не ломал сканирование
   const qr = QRCode.create(url, { errorCorrectionLevel: 'H' })
@@ -80,13 +115,13 @@ export function generateSvg(url, options = {}) {
   const finders = [[0, 0], [0, N - 7], [N - 7, 0]]
   const inFinder = (r, c) => finders.some(([fr, fc]) => r >= fr && r < fr + 7 && c >= fc && c < fc + 7)
 
-  const logo = o.logo ? loadLogo() : null
+  const logo = o.logo ? loadLogo(o.logoSvg) : null
   const cc = (N - 1) / 2
   const clearHalf = logo ? Math.round((N * o.logoFrac) / 2) : -1
   const inLogoZone = (r, c) => logo && Math.abs(r - cc) <= clearHalf && Math.abs(c - cc) <= clearHalf
 
   const parts = []
-  if (o.bg && o.bg !== 'none') parts.push(`<rect width="${totalPx}" height="${totalPx}" fill="${o.bg}"/>`)
+  if (bg && bg !== 'none') parts.push(`<rect width="${totalPx}" height="${totalPx}" fill="${bg}"/>`)
 
   // Модули-кружки (кроме зон финдеров и логотипа)
   const rr = (o.dot * cell).toFixed(2)
@@ -99,15 +134,15 @@ export function generateSvg(url, options = {}) {
       dots.push(`<circle cx="${cx}" cy="${cy}" r="${rr}"/>`)
     }
   }
-  parts.push(`<g fill="${o.fg}">${dots.join('')}</g>`)
+  parts.push(`<g fill="${fg}">${dots.join('')}</g>`)
 
   // Глазки: толстое кольцо (внешний r 3.5 клетки, толщина 1) + сплошная точка (r 1.5)
   for (const [fr, fc] of finders) {
     const ex = off + (fc + 3.5) * cell
     const ey = off + (fr + 3.5) * cell
     parts.push(
-      `<circle cx="${ex}" cy="${ey}" r="${(3.0 * cell).toFixed(2)}" fill="none" stroke="${o.fg}" stroke-width="${cell}"/>` +
-      `<circle cx="${ex}" cy="${ey}" r="${(1.5 * cell).toFixed(2)}" fill="${o.fg}"/>`
+      `<circle cx="${ex}" cy="${ey}" r="${(3.0 * cell).toFixed(2)}" fill="none" stroke="${fg}" stroke-width="${cell}"/>` +
+      `<circle cx="${ex}" cy="${ey}" r="${(1.5 * cell).toFixed(2)}" fill="${fg}"/>`
     )
   }
 
@@ -117,7 +152,7 @@ export function generateSvg(url, options = {}) {
     const x = (totalPx - boxPx) / 2
     parts.push(
       `<svg x="${x.toFixed(2)}" y="${x.toFixed(2)}" width="${boxPx.toFixed(2)}" height="${boxPx.toFixed(2)}" ` +
-      `viewBox="${logo.viewBox}" preserveAspectRatio="xMidYMid meet">${logo.inner}</svg>`
+      `viewBox="${logo.viewBox}" preserveAspectRatio="xMidYMid meet">${themeLogo(logo.inner, o.theme, fg, bg)}</svg>`
     )
   }
 
@@ -133,7 +168,7 @@ function main() {
     process.exit(2)
   }
   if (!opts.url) {
-    console.error('Использование: node scripts/gen-qr.mjs <url> [имя] [--out f.svg] [--bg #121212|none] [--no-logo]')
+    console.error('Использование: node scripts/gen-qr.mjs <url> [имя] [--out f.svg] [--theme dark|light] [--logo-svg f.svg] [--bg #121212|none] [--no-logo]')
     process.exit(2)
   }
 

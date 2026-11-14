@@ -16,12 +16,13 @@ function have(bin) {
   try { execSync(`command -v ${bin}`, { stdio: 'ignore' }); return true } catch { return false }
 }
 
-// Инвертируем рендер и декодируем; вернёт распознанный текст или ''
-function decode(svg, dir, tag) {
+// Рендерим и декодируем; тёмную тему инвертируем (декодеры ждут тёмное на светлом).
+// Вернёт распознанный текст или ''
+function decode(svg, dir, tag, invert = true) {
   const svgP = join(dir, `${tag}.svg`), pngP = join(dir, `${tag}.png`), invP = join(dir, `${tag}-inv.png`)
   writeFileSync(svgP, svg)
   execFileSync('rsvg-convert', ['-w', '700', svgP, '-o', pngP], { stdio: 'ignore' })
-  execFileSync('convert', [pngP, '-negate', invP], { stdio: 'ignore' })
+  execFileSync('convert', invert ? [pngP, '-negate', invP] : [pngP, invP], { stdio: 'ignore' })
   try { return execFileSync('zbarimg', ['--raw', '-q', invP], { encoding: 'utf8' }).trim() } catch { return '' }
 }
 
@@ -38,10 +39,27 @@ ok(svg.includes('<svg x='), 'логотип вложен по умолчанию
 ok(!generateSvg('https://x.io', { logo: false }).includes('<svg x='), '--no-logo убирает логотип')
 ok(generateSvg('https://x.io', { bg: 'none' }).indexOf('<rect') === -1, 'bg=none → без фонового rect')
 
+// --- Темы и логотип партнёра ---
+const light = generateSvg('https://css.moscow', { theme: 'light' })
+ok(light.includes('fill="#ffffff"/>') && light.includes('<g fill="#121212"'), 'light: тёмные модули на белом')
+ok(!/rgb\(100%, 100%, 100%\)/.test(light), 'light: белая башенка перекрашена в цвет модулей')
+ok(/79\.219055%/.test(light), 'light: красное «CSS» не тронуто')
+ok(generateSvg('https://x.io', { theme: 'light', fg: '#3845cf' }).includes('<g fill="#3845cf"'), '--fg перекрывает тему')
+const partner = generateSvg('https://t.me/school21sber', { logoSvg: 'public/logos/school21.svg' })
+ok(partner.includes('<svg x=') && partner.includes('viewBox="0 0 101 101"'), '--logo-svg вкладывает логотип партнёра')
+const partnerLight = generateSvg('https://t.me/school21sber', { logoSvg: 'public/logos/school21.svg', theme: 'light' })
+ok(!/#ffffff/i.test(partnerLight.split('<svg x=')[1]), 'light: белый логотип партнёра перекрашен')
+
 // --- Boundary ---
 let threw = false
 try { generateSvg('') } catch { threw = true }
 ok(threw, 'пустой url → ошибка')
+threw = false
+try { generateSvg('https://x.io', { theme: 'pink' }) } catch { threw = true }
+ok(threw, 'неизвестная тема → ошибка')
+threw = false
+try { generateSvg('https://x.io', { logoSvg: 'нет-такого.svg' }) } catch { threw = true }
+ok(threw, 'нет файла логотипа → ошибка')
 
 // --- Сканируемость (реальные ссылки разной длины/содержания) ---
 if (canDecode) {
@@ -59,6 +77,9 @@ if (canDecode) {
   }
   // без логотипа тоже валиден
   ok(decode(generateSvg('https://no.logo/test', { logo: false }), dir, 'nl') === 'https://no.logo/test', 'без логотипа сканируется')
+  ok(decode(light, dir, 'lt', false) === 'https://css.moscow', 'light сканируется')
+  ok(decode(partner, dir, 'p21') === 'https://t.me/school21sber', 'с логотипом партнёра сканируется')
+  ok(decode(partnerLight, dir, 'p21l', false) === 'https://t.me/school21sber', 'light + партнёр сканируется')
 }
 
 console.log(failures === 0 ? '\nВСЕ ПРОВЕРКИ ПРОЙДЕНЫ' : `\nПРОВАЛЕНО: ${failures}`)
