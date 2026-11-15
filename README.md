@@ -43,12 +43,11 @@ pnpm test:qr        # проверка генератора QR
 2. **Сменить номер:** `"meetup": "33"` в [`package.json`](package.json).
 3. **Собрать данные с сайта.** Митап, доклады, спикеры и партнёры лежат в репо css.moscow:
    `packages/content/src/{events,talks,speakers,partners}`.
-4. **Обновить контент** по таблицам ниже: обложку, партнёра, спикеров, форму «Оцените митап».
-5. **Сгенерировать QR** партнёра и формы обратной связи. Генератор сразу пишет пару для тёмной
-   и светлой схемы:
+4. **Обновить контент** по таблицам ниже: обложку, партнёра, спикеров. QR «Оцените митап» ведёт на
+   постоянную форму css.moscow/feedback и не меняется: форма сама берёт текущий митап из бота.
+5. **Сгенерировать QR** партнёра. Генератор сразу пишет пару для тёмной и светлой схемы:
    ```bash
    pnpm qr https://t.me/partner partner --logo-svg public/logos/partner.svg
-   pnpm qr https://forms.yandex.ru/u/<id>/ rate-33
    ```
    Подробнее — в [scripts/README.md → QR](scripts/README.md#генератор-qr-кодов).
 6. **Проверить:** `pnpm dev` и `pnpm dev:close` — каждый слайд влезает, QR читается телефоном.
@@ -71,6 +70,7 @@ pnpm test:qr        # проверка генератора QR
 | 6+ | [`speaker`](theme/README.md#speaker) | Спикер, по слайду на доклад | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
 | | [`logo-side`](theme/README.md#logo-side) | Активность | `title` и текст |
 | | `qr-side` | Вопросы в чат `#вопрос_спикеру` | не меняется |
+| | `qr-side` | «Нет телеграма? Спросите через сайт» (css.moscow/question) | не меняется |
 | | `statement` ×2 | «Вы готовы?» / «Мы начинаем» | не меняется |
 
 ### Финал — `close.md`
@@ -80,7 +80,7 @@ pnpm test:qr        # проверка генератора QR
 | 1 | `statement` | «Спасибо» | не меняется |
 | 2 | `qr-side` | Спасибо партнёру | `qr`, `title`, текст |
 | 3 | `qr-side` | «Подавайте доклад» | не меняется |
-| 4 | `qr-side` | «Оцените митап» | **QR формы — каждый митап** |
+| 4 | `qr-side` | «Оцените митап» (css.moscow/feedback) | не меняется |
 | 5 | `qr-side` | BeerJS Moscow | не меняется |
 | 6 | [`photo-grid`](theme/README.md#photo-grid) | «Наша редакция» | `images` из `public/img/team/` |
 | 7 | `statement` + `note` | «Go пить ПИВО¹» | не меняется |
