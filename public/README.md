@@ -24,6 +24,7 @@ img/              ← прочее: фото со стенда и т.п.
 | `announce.svg` | https://t.me/moscowcss | старт: «Анонсы» | `pnpm qr https://t.me/moscowcss announce` |
 | `chat.svg` | https://t.me/moscowcss_chat | старт: «Общение» | `pnpm qr https://t.me/moscowcss_chat chat` |
 | `questions.svg` | https://t.me/moscowcss_chat | старт: «Вопросы в чат» | `pnpm qr https://t.me/moscowcss_chat questions` |
+| `question-form.svg` | https://css.moscow/question/ | старт: «Нет телеграма? Спросите через сайт» (форма вопроса спикеру, приходит в бота) | `pnpm qr https://css.moscow/question/ question-form` |
 | `talk.svg` | https://css.moscow/cfp/ | старт и финал: «Подать доклад» (форма заявки на сайте, заявки приходят в бота) | `pnpm qr https://css.moscow/cfp/ talk` |
 | `school21.svg` | https://t.me/school21sber | партнёр 32, логотип «21» | `pnpm qr https://t.me/school21sber school21 --logo-svg public/logos/school21.svg` |
 | `forms.yandex.ru-u-6a4eae811f1eb545dd30bd09.svg` | https://forms.yandex.ru/u/6a4eae811f1eb545dd30bd09 | финал: «Оцените митап» (форма 31) | `pnpm qr <ссылка формы> rate-<N>` |
