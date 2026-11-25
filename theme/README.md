@@ -149,8 +149,9 @@ layout: photo-grid
 title: Наша редакция
 cols: 4
 images:
-  - /img/team/1.jpg
-  - /img/team/2.jpg
+  - /img/team/1.jpg                          # просто фото
+  - { src: /img/team/2.jpg, name: Имя }      # фото с подписью
+  - { name: Таинственный молодец }           # без фото: «?» в восьмиугольнике
 ---
 ```
 

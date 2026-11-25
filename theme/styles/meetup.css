@@ -211,3 +211,21 @@
 	gap: 1.25rem 2rem;
 	margin-top: 0.5rem;
 }
+
+.mc-photogrid__cell {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0;
+}
+
+.mc-photogrid__secret {
+	font: 400 4rem/1 var(--mc-font-display);
+}
+
+.mc-photogrid__name {
+	color: var(--mc-muted);
+	font: 400 1rem/1.2 var(--mc-font-mono);
+	text-align: center;
+}
