@@ -1,6 +1,10 @@
 <script setup lang="ts">
 // Восьмиугольник css.moscow: стикер «position: в зале» и рамка аватара спикера.
 // С `src` — фото в цветной рамке, без — стикер с текстом из слота.
+// `src` из public/ ("/images/...") прогоняем через asset(): Vite не переписывает пути
+// в props компонентов, и при сборке с --base (GitHub Pages) фото иначе дают 404.
+import { asset } from '../utils/asset'
+
 withDefaults(defineProps<{
   size?: string
   /** sticker | sky | blue | yellow | red | orange | green */
@@ -23,7 +27,7 @@ withDefaults(defineProps<{
       '--on-fill': tone === 'sticker' ? 'var(--mc-on-sticker)' : `var(--mc-on-tone-${tone})`,
     }"
   >
-    <img v-if="src" :src="src" :alt="alt">
+    <img v-if="src" :src="asset(src)" :alt="alt">
     <span v-else class="mc-octagon__text"><slot /></span>
   </div>
 </template>
