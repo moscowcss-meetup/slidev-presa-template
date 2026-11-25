@@ -82,6 +82,7 @@ items:
 layout: photo-grid
 title: Наша редакция
 images:
+  - { src: /img/team/alyona-laskina.png, name: Алёна Ласкина }
   - { src: /img/team/darina-pairel.png,  name: Дарина Паирель }
   - { src: /img/team/egor-levchenko.png, name: Егор Левченко }
   - { src: /img/team/elena-virtanen.png, name: Елена Виртанен }
