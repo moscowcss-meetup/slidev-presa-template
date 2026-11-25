@@ -23,13 +23,15 @@ img/              ← прочее: фото со стенда и т.п.
 |------|----------|-----|------------------|
 | `announce.svg` | https://t.me/moscowcss | старт: «Анонсы» | `pnpm qr https://t.me/moscowcss announce` |
 | `chat.svg` | https://t.me/moscowcss_chat | старт: «Общение» | `pnpm qr https://t.me/moscowcss_chat chat` |
-| `questions.svg` | https://t.me/moscowcss_chat | старт: «Вопросы в чат» | `pnpm qr https://t.me/moscowcss_chat questions` |
-| `question-form.svg` | https://css.moscow/question/ | старт: «Нет телеграма? Спросите через сайт» (форма вопроса спикеру, приходит в бота) | `pnpm qr https://css.moscow/question/ question-form` |
-| `talk.svg` | https://css.moscow/cfp/ | старт и финал: «Подать доклад» (форма заявки на сайте, заявки приходят в бота) | `pnpm qr https://css.moscow/cfp/ talk` |
+| `questions.svg` | https://t.me/moscowcss_chat | старт: «Вопросы в чат» и левый QR в «Чат = бот = сайт» | `pnpm qr https://t.me/moscowcss_chat questions` |
+| `question-form.svg` | https://css.moscow/question/ | старт: «Чат = бот = сайт», правый QR (форма вопроса спикеру, приходит в бота) | `pnpm qr https://css.moscow/question/ question-form` |
+| `bot.svg` | https://t.me/MoscowCSS_bot | старт: «Чат = бот = сайт», средний QR (в меню бота «🎤 Вопрос спикеру»); финал: «Сайт = бот», правый QR («💬 Обратная связь») | `pnpm qr https://t.me/MoscowCSS_bot bot` |
+| `bot-cfp.svg` | https://t.me/MoscowCSS_bot?start=cfp | финал: «Сайт = бот» про доклад, правый QR (бот сразу открывает заявку) | `pnpm qr 'https://t.me/MoscowCSS_bot?start=cfp' bot-cfp` |
+| `talk.svg` | https://css.moscow/cfp/ | старт и финал: «Подать доклад», финал: левый QR в «Сайт = бот» (форма заявки на сайте, заявки приходят в бота) | `pnpm qr https://css.moscow/cfp/ talk` |
 | `school21.svg` | https://t.me/school21sber | партнёр 32, логотип «21» | `pnpm qr https://t.me/school21sber school21 --logo-svg public/logos/school21.svg` |
-| `feedback.svg` | https://css.moscow/feedback/ | финал: «Оцените митап» (форма на сайте, сама берёт текущий митап) | `pnpm qr https://css.moscow/feedback/ feedback` |
+| `feedback.svg` | https://css.moscow/feedback/ | финал: «Оцените митап» и левый QR в «Сайт = бот» (форма на сайте, сама берёт текущий митап) | `pnpm qr https://css.moscow/feedback/ feedback` |
 | `forms.yandex.ru-u-6a4eae811f1eb545dd30bd09.svg` | https://forms.yandex.ru/u/6a4eae811f1eb545dd30bd09 | только архив: «Оцените митап» 31 | — |
-| `beerjs.svg` | https://t.me/beerjs_moscow | финал: BeerJS Moscow | `pnpm qr https://t.me/beerjs_moscow beerjs` |
+| `beerjs.svg` | https://t.me/beerjs_moscow | только архив: BeerJS Moscow в финале 31 | `pnpm qr https://t.me/beerjs_moscow beerjs` |
 | `zvuk.svg` | https://t.me/+vMFpP57vgRQzMmFi | партнёр 31 (Звук Tech) | `pnpm qr <ссылка> zvuk` |
 | `rate.svg` | https://forms.yandex.ru/u/6a1210eef47e73ed24b39927/ | не используется | — |
 

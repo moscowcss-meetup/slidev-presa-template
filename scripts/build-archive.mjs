@@ -20,11 +20,17 @@ const current = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')).
 const only = process.argv[2]
 
 const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, stdio: 'inherit' })
-// pnpm запускаем через node + его же js (npm_execpath при `pnpm build:archive`): без shell,
-// иначе на Windows pnpm.cmd не стартует из execFileSync
-const pnpm = (args, cwd) => process.env.npm_execpath
-  ? run(process.execPath, [process.env.npm_execpath, ...args], cwd)
-  : run('pnpm', args, cwd)
+// pnpm берём тот же, что запустил `pnpm build:archive` (npm_execpath), и без shell: иначе на Windows
+// pnpm.cmd не стартует из execFileSync. npm_execpath бывает JS-файлом (pnpm из npm/corepack) —
+// его запускаем через node, — или нативным бинарником (@pnpm/exe, standalone-установка pnpm 11):
+// его запускаем напрямую, через node он падает с SyntaxError на ELF/PE-заголовке.
+const pnpmPath = process.env.npm_execpath
+const pnpm = (args, cwd) => {
+  if (!pnpmPath) return run('pnpm', args, cwd)
+  return /\.[cm]?js$/i.test(pnpmPath)
+    ? run(process.execPath, [pnpmPath, ...args], cwd)
+    : run(pnpmPath, args, cwd)
+}
 
 for (const [meetup, ref] of Object.entries(manifest)) {
   if (only && meetup !== only) continue
