@@ -64,13 +64,14 @@ pnpm test:qr        # проверка генератора QR
 |---|--------|-------|-----------|
 | 1 | [`cover`](theme/README.md#cover) | Обложка | `badge`, `date`, `time`, `tags`, `meetup` и номер `**33**` |
 | 2 | [`statement`](theme/README.md#statement) | «Приветствуем на N митапе» | номер |
-| 3 | [`qr-side`](theme/README.md#qr-side) | Спасибо партнёру | `qr`, `title`, текст |
-| 4 | [`qr-trio`](theme/README.md#qr-trio) | Анонсы / общение / подать доклад | не меняется |
-| 5 | `statement` | «Спасибо замечательным спикерам» | не меняется |
-| 6+ | [`speaker`](theme/README.md#speaker) | Спикер, по слайду на доклад | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
-| | [`logo-side`](theme/README.md#logo-side) | Активность | `title` и текст |
+| 3 | `default` | «Регистрируйтесь внимательно» + логотип Networkly | не меняется |
+| 4 | [`qr-side`](theme/README.md#qr-side) | Спасибо партнёру | `qr`, `title`, текст |
+| 5 | [`qr-trio`](theme/README.md#qr-trio) | Анонсы / общение / подать доклад | не меняется |
+| 6 | `statement` | «Спасибо замечательным спикерам» | не меняется |
+| 7+ | [`speaker`](theme/README.md#speaker) | Спикер, по слайду на доклад | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
+| | [`logo-side`](theme/README.md#logo-side) | Активность, если она есть на митапе | `title` и текст |
 | | `qr-side` | Вопросы в чат `#вопрос_спикеру` | не меняется |
-| | `qr-side` | «Нет телеграма? Спросите через сайт» (css.moscow/question) | не меняется |
+| | `qr-trio` | «Чат = бот = сайт»: #вопрос_спикеру, @MoscowCSS_bot, css.moscow/question | не меняется |
 | | `statement` ×2 | «Вы готовы?» / «Мы начинаем» | не меняется |
 
 ### Финал — `close.md`
@@ -80,10 +81,11 @@ pnpm test:qr        # проверка генератора QR
 | 1 | `statement` | «Спасибо» | не меняется |
 | 2 | `qr-side` | Спасибо партнёру | `qr`, `title`, текст |
 | 3 | `qr-side` | «Подавайте доклад» | не меняется |
-| 4 | `qr-side` | «Оцените митап» (css.moscow/feedback) | не меняется |
-| 5 | `qr-side` | BeerJS Moscow | не меняется |
-| 6 | [`photo-grid`](theme/README.md#photo-grid) | «Наша редакция» | `images` из `public/img/team/` |
-| 7 | `statement` + `note` | «Go пить ПИВО¹» | не меняется |
+| 4 | `qr-trio` | «Сайт = бот»: css.moscow/cfp и бот с заявкой на доклад | не меняется |
+| 5 | `qr-side` | «Оцените митап» (css.moscow/feedback) | не меняется |
+| 6 | `qr-trio` | «Сайт = бот»: css.moscow/feedback и @MoscowCSS_bot | не меняется |
+| 7 | [`photo-grid`](theme/README.md#photo-grid) | «Наша редакция» | `images` из `public/img/team/` |
+| 8 | `statement` | «Идём общаться в неформальной обстановке» | не меняется |
 
 Ещё есть [`full-image`](theme/README.md#full-image): фото в край слайда, например со стенда на
 конференции.
