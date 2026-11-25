@@ -5,6 +5,8 @@ export function asset(path?: string): string | undefined {
   if (!path) return path
   if (/^(https?:)?\/\//.test(path) || path.startsWith('data:')) return path
   const base = import.meta.env.BASE_URL || '/'
+  // Идемпотентно: путь, уже прошедший через asset() (layout → Octagon), не префиксуем дважды.
+  if (base !== '/' && path.startsWith(base)) return path
   return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 }
 
