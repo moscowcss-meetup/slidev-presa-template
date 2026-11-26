@@ -86,9 +86,9 @@ images:
   - { src: /img/team/darina-pairel.png,  name: Дарина Паирель }
   - { src: /img/team/egor-levchenko.png, name: Егор Левченко }
   - { src: /img/team/elena-virtanen.png, name: Елена Виртанен }
+  - { src: /img/team/inna-chernyshova.png, name: Инна Чернышова }
   - { src: /img/team/katya-panova.png,   name: Катя Панова }
   - { name: Таинственный молодец }
-  - { name: Таинственная умничка }
   - { src: /img/team/roman-troitsky.png, name: Роман Троицкий }
 ---
 
