@@ -39,7 +39,7 @@ fonts/        ← Jost, Montserrat, Golos Text, JetBrains Mono — локаль�
 | `section` | разделитель актов | `num`, `tags`, `seed`, `snow` |
 | [`statement`](#statement) | крупная фраза | `note`, `tags`, `seed`, `snow` |
 | [`qr-side`](#qr-side) | QR + заголовок и текст | `qr`, `title` |
-| [`qr-trio`](#qr-trio) | три QR в ряд | `items`, `footer`, `footerSub`, `seed` |
+| [`qr-trio`](#qr-trio) | три или четыре QR в ряд | `items`, `footer`, `footerSub`, `seed` |
 | [`speaker`](#speaker) | спикер | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
 | [`logo-side`](#logo-side) | анонс со звездой | `title`, `snow` |
 | [`full-image`](#full-image) | фото в край | `image` |

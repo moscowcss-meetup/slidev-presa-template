@@ -104,6 +104,15 @@
 	width: 100%;
 }
 
+/* Четыре QR в 980px не влезают по 14rem: сужаем ячейки и зазор */
+.mc-qrtrio__row--four {
+	gap: 2rem;
+}
+
+.mc-qrtrio__row--four .mc-qrtrio__cell {
+	width: 12rem;
+}
+
 .mc-qrtrio__footer {
 	display: flex;
 	align-items: baseline;
