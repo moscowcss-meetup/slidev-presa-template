@@ -88,7 +88,7 @@ images:
   - { src: /img/team/elena-virtanen.png, name: Елена Виртанен }
   - { src: /img/team/inna-chernyshova.png, name: Инна Чернышова }
   - { src: /img/team/katya-panova.png,   name: Катя Панова }
-  - { name: Таинственный молодец }
+  - { src: /img/team/petr-zhemchugov.png, name: Пётр Жемчугов }
   - { src: /img/team/roman-troitsky.png, name: Роман Троицкий }
 ---
 
