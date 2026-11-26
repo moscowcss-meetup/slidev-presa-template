@@ -66,7 +66,7 @@ pnpm test:qr        # проверка генератора QR
 | 2 | [`statement`](theme/README.md#statement) | «Приветствуем на N митапе» | номер |
 | 3 | `default` | «Регистрируйтесь внимательно» + логотип Networkly | не меняется |
 | 4 | [`qr-side`](theme/README.md#qr-side) | Спасибо партнёру | `qr`, `title`, текст |
-| 5 | [`qr-trio`](theme/README.md#qr-trio) | Анонсы / общение / подать доклад | не меняется |
+| 5 | [`qr-trio`](theme/README.md#qr-trio) | Сайт / анонсы / общение / подать доклад | не меняется |
 | 6 | `statement` | «Спасибо замечательным спикерам» | не меняется |
 | 7+ | [`speaker`](theme/README.md#speaker) | Спикер, по слайду на доклад | `name`, `role`, `photo`, `pitch`, `talk`, `tone` |
 | | [`logo-side`](theme/README.md#logo-side) | Активность, если она есть на митапе | `title` и текст |

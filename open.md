@@ -69,15 +69,14 @@ title: Спасибо Школе 21 за это
 
 ---
 layout: qr-trio
-footer: css.moscow
-footerSub: наш сайт
 items:
+  - { label: css.moscow,    img: /qr/site.svg }
   - { label: Анонсы,        img: /qr/announce.svg }
   - { label: Общение,       img: /qr/chat.svg }
   - { label: Подать доклад, img: /qr/talk.svg }
 ---
 
-<!-- 5. ТРИ QR — ГОТОВО. Контент задаётся во frontmatter (items) -->
+<!-- 5. ЧЕТЫРЕ QR — ГОТОВО. Сайт, анонсы, общение, подать доклад. Контент задаётся во frontmatter (items) -->
 
 ---
 layout: statement

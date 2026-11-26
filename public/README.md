@@ -21,6 +21,7 @@ img/              ← прочее: фото со стенда и т.п.
 
 | Файл (+ `-light.svg`) | Ведёт на | Где | Перегенерировать |
 |------|----------|-----|------------------|
+| `site.svg` | https://css.moscow/ | старт: первый QR на слайде «Сайт / анонсы / общение / подать доклад» | `pnpm qr https://css.moscow/ site` |
 | `announce.svg` | https://t.me/moscowcss | старт: «Анонсы» | `pnpm qr https://t.me/moscowcss announce` |
 | `chat.svg` | https://t.me/moscowcss_chat | старт: «Общение» | `pnpm qr https://t.me/moscowcss_chat chat` |
 | `questions.svg` | https://t.me/moscowcss_chat | старт: «Вопросы в чат» и левый QR в «Чат = бот = сайт» | `pnpm qr https://t.me/moscowcss_chat questions` |
