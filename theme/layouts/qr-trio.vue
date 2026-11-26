@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Три QR в ряд, над каждым — плашка-подпись. `items: [{ label, img }]`,
+// Три QR в ряд (или четыре — ячейки сужаются), над каждым — плашка-подпись. `items: [{ label, img }]`,
 // внизу `footer` (адрес сайта) и `footerSub`. `img` — тёмный SVG, светлую пару тема подставит сама.
 import { useDarkMode } from '@slidev/client'
 import { qrAsset } from '../utils/asset'
@@ -19,7 +19,7 @@ const { isDark } = useDarkMode()
 
 <template>
   <div class="slidev-layout mc-qrtrio">
-    <div class="mc-qrtrio__row">
+    <div class="mc-qrtrio__row" :class="{ 'mc-qrtrio__row--four': items.length > 3 }">
       <figure v-for="(item, i) in items" :key="item.label" class="mc-qrtrio__cell">
         <Pill :tone="tones[i]" :tilt="tilts[i % tilts.length]">{{ item.label }}</Pill>
         <div class="mc-qrcard"><img :src="qrAsset(item.img, isDark)" :alt="item.label"></div>
